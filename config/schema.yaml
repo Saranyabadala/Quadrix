@@ -1,0 +1,118 @@
+# Column mapping for the three sources.
+#
+# This is the ONLY file you need to edit to point the pipeline at real data.
+# Each source declares its id column and a mapping from the pipeline's canonical
+# field names to that source's actual column names.
+#
+#   fields.<canonical_name>: <column_in_that_source_csv>
+#
+# Canonical names the pipeline understands:
+#   name, address, city, state, zip, phone, category, lat, lon
+#
+# Rules:
+#   * Use `null` for a field the source does not carry at all. The pipeline
+#     then treats it as 100% missing and relies on the other sources / the
+#     missingness features instead of dropping the row.
+#   * A field may be absent column-wise but present in the address blob; the
+#     normalizer always re-parses city/state/zip out of `address` when the
+#     dedicated columns are missing, so `city: null` is not fatal.
+#   * Extra source columns are ignored.
+
+version: 1
+
+sources:
+
+  # ---------------------------------------------------------------------------
+  # Source 1 -- the deduplicated reference source.
+  # Cleanest data of the three: canonical legal names, full addresses, both
+  # phone and geo. This is the side we score candidates *against*.
+  # ---------------------------------------------------------------------------
+  source1:
+    label: Source 1 (reference)
+    path: data/raw/source1.csv
+    id_col: business_id
+    fields:
+      name: business_name
+      address: street_address
+      city: city
+      state: state
+      zip: zip_code
+      phone: phone
+      category: category
+      lat: latitude
+      lon: longitude
+
+  # ---------------------------------------------------------------------------
+  # Source 2 -- corporate registry style feed.
+  # Characteristics that matter for matching:
+  #   * Always carries the legal suffix (LLC / Inc / Corp) on the legal name.
+  #   * Secondary unit is explicit and uses the "Ste 200" convention.
+  #   * Phone is consistently (XXX) XXX-XXXX but the area code is often the
+  #     company switchboard rather than the storefront number.
+  #   * NO coordinates. We cannot use geodistance for this source, only
+  #     address-component and zip agreement.
+  # ---------------------------------------------------------------------------
+  source2:
+    label: Source 2 (corporate registry)
+    path: data/raw/source2.csv
+    id_col: registry_id
+    fields:
+      name: entity_name
+      address: addr_line1
+      city: addr_city
+      state: addr_state
+      zip: addr_zip
+      phone: contact_phone
+      category: naics_label
+      lat: null
+      lon: null
+
+  # ---------------------------------------------------------------------------
+  # Source 3 -- local business directory / aggregator.
+  # The messiest source:
+  #   * Marketing name, not legal name. "Acme Bike Shop" may be registered as
+  #     "Acme Bicycle Company LLC". Legal suffix and generic category words are
+  #     frequently dropped.
+  #   * Abbreviated street suffixes ("St", "Ave", "Blvd").
+  #   * City is often missing; the zip carries the geography instead.
+  #   * Phone is frequently a 7-digit local number with no area code.
+  #   * Category uses a different controlled vocabulary than Source 1.
+  # ---------------------------------------------------------------------------
+  source3:
+    label: Source 3 (local directory)
+    path: data/raw/source3.csv
+    id_col: listing_id
+    fields:
+      name: listing_name
+      address: street
+      city: null
+      state: state_code
+      zip: postal_code
+      phone: phone_number
+      category: industry
+      lat: geo_lat
+      lon: geo_lon
+
+# ---------------------------------------------------------------------------
+# Path / dtypes for the *derived* columns. The normalizer writes these onto the
+# cleaned frames; naming them here keeps the contract in one place.
+# ---------------------------------------------------------------------------
+derived:
+  name: name_norm
+  name_core: name_core
+  name_tokens: name_tokens
+  address: address_norm
+  house_number: house_number
+  street_name: street_name
+  street_suffix: street_suffix
+  street_dir: street_dir
+  unit: unit
+  city: city_norm
+  state: state_norm
+  zip: zip5
+  zip3: zip3
+  phone: phone10
+  phone7: phone7
+  category: category_norm
+  lat: lat
+  lon: lon

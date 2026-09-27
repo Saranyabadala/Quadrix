@@ -1,0 +1,225 @@
+# Entity resolution over the real schema: entity_id / business_name /
+# business_address / country.
+#
+# This is the only file to edit to point the pipeline at your own data. Every
+# path, column name, threshold, weight, cap and chunk size in the run is
+# declared here; nothing is hard-coded in `src/`.
+#
+# The three sources share only those four columns. There is no phone, email,
+# postal code, date of birth, gender, first name or last name anywhere in this
+# dataset, so no feature or blocking key may reference one: a key on a column
+# that does not exist is a key shared by every record, which is a cross product
+# wearing a disguise.
+#
+# `country` is an open set. `France` appears only in the test set, so nothing
+# here filters, whitelists or one-hot encodes it.
+
+version: 1
+
+# Tab-separated, because business addresses contain commas. Reading a .tsv
+# without `sep="\t"` yields one column containing the whole line.
+sep: "\t"
+
+# Rows per read_csv chunk for Source 2 and Source 3. This is the main memory
+# dial: peak usage is the Source 1 index + one chunk + that chunk's candidate
+# pairs. 50k keeps a chunk's pairs in the low hundreds of MB even when the mean
+# candidate count is high.
+chunk_size: 50000
+
+# Bounded training sample (Change: classifier training). Every positive pair is
+# kept; negatives are sampled up to this budget. At the ~1% positive rate of a
+# real candidate set, 500k rows is plenty and a full 30M-row matrix is not
+# necessary -- LightGBM's histogram binning does not benefit proportionally.
+max_training_pairs: 500000
+
+# Rows of the tune split cached for threshold tuning. Also thinned with a
+# deterministic stride if exceeded, so the threshold is chosen from a
+# reproducible sample rather than whichever chunk filled up first.
+max_tuning_pairs: 2000000
+
+# Ceiling on the in-memory per-entity candidate sets used to build
+# candidate_pairs.tsv. Above it the rollup stops growing and the summary report
+# records `rollup_saturated: true` -- a visible truncation, never a silent one.
+max_rollup_pairs: 40000000
+
+paths:
+  # Ground truth exists for train only. This is the split that trains the model
+  # and produces the one reported F_0.5.
+  validate:
+    source1: student_resource/dataset/train/train_source1.tsv
+    source2: student_resource/dataset/train/train_source2.tsv
+    source3: student_resource/dataset/train/train_source3.tsv
+    ground_truth: student_resource/dataset/train/train_ground_truth.tsv
+  # No ground truth. F_0.5 is not computed here; the thresholds come from a
+  # previous validate run via `model`/`decision` below.
+  predict:
+    source1: student_resource/dataset/test/test_source1.tsv
+    source2: student_resource/dataset/test/test_source2.tsv
+    source3: student_resource/dataset/test/test_source3.tsv
+
+# Canonical field name -> the source's actual column. `name`, `address` and
+# `country` are the only canonical names the minimal schema understands;
+# `entity_id` is separate because it is the join key, not a comparable field.
+sources:
+  source1:
+    id_col: entity_id
+    fields:
+      name: business_name
+      address: business_address
+      country: country
+  source2:
+    id_col: entity_id
+    fields:
+      name: business_name
+      address: business_address
+      country: country
+  source3:
+    id_col: entity_id
+    fields:
+      name: business_name
+      address: business_address
+      country: country
+
+blocking:
+  # ---- Change 3: candidate-size safety ---------------------------------
+  # Hard ceiling on merged candidates per Source 2/3 record. Reached only after
+  # per-rule narrowing has been tried, so hitting it means the record really did
+  # match a lot of coarse keys.
+  max_candidates_per_record: 100
+  # Soft ceiling applied per rule before merging. A rule above this is narrowed
+  # with an extra cheap key (require a shared name token) rather than dropped,
+  # because dropping a rule loses a real record.
+  per_rule_cap: 40
+  # Rows above max_candidates_per_record * this are written to the debug log
+  # instead of being silently truncated.
+  large_candidate_multiplier: 2.0
+
+  # ---- index construction ----------------------------------------------
+  # Name-prefix length for the country_prefix rule.
+  #
+  # Measured on the training ground truth: at 4 characters this rule produces
+  # 251.7 candidates per Source 1 entity, because real business vocabularies
+  # share short prefixes across thousands of unrelated businesses ("asso" ->
+  # Associated/Association/Assortment). Those blocks then overrun
+  # max_candidates_per_record and get truncated, and the truncation used to
+  # discard low-precedence rules first -- which is where true matches live.
+  # At 8 characters the rule is selective enough to be worth keeping.
+  name_prefix_len: 8
+  phonetic_scheme: nysiis        # nysiis | soundex
+  min_token_len: 3
+  # A key value held by more than this many Source 1 rows is a category, not an
+  # identifier ("Paris" in France), so the bucket is dropped and counted. This
+  # is one of the two load-bearing cost controls; the other is
+  # max_candidates_per_record.
+  max_bucket_size: 400
+  # A name token held by more than min(ratio x |Source 1|, absolute) Source 1
+  # rows is a category word ("services", "ltd") and never becomes a blocking key.
+  #
+  # Keep `absolute` at or below `max_bucket_size`: a token admitted to the index
+  # and then dropped as a hot bucket is pure waste, and measured on a 15k-entity
+  # subsample of the real data, admitting tokens between the df cutoff and the
+  # bucket cap cost recall without contributing a single useful candidate.
+  #
+  # Measured trade-off on that subsample:
+  #   ratio 0.002  cutoff  30  recall 0.8637  16.1 candidates/record
+  #   ratio 0.01   cutoff 150  recall 0.8856  40.2 candidates/record  <-- knee
+  #   ratio 0.05   cutoff 750  recall 0.8759  50.8 candidates/record
+  # Past the knee recall flattens and the extra pairs only push records into the
+  # per-record cap, where truncation starts dropping true pairs.
+  max_token_df_ratio: 0.01
+  max_token_df_absolute: 400
+  # true  -> token index keyed as `country|token`; a "Paris" in France and a
+  #         "Paris" in Texas cannot meet, and no cross-country block is ever
+  #         built.
+  # false -> bare global token index. More recall when a country label is
+  #         wrong, at the cost of large cross-country blocks.
+  scope_token_index_by_country: true
+
+  # ---- rule switches (OR logic) ----------------------------------------
+  enable_country_prefix: true          # country + business_name prefix
+  enable_country_city_prefix: true     # country + extracted city + name prefix
+  enable_shared_token: true            # shared significant business_name token
+  enable_phonetic_country: true        # phonetic code of the name + country
+  # Exact entity_id hook. OFF by default: the three sources come from
+  # independent registries, so the ids are not expected to ever coincide. It
+  # costs one dict, and turning it on settles the question empirically.
+  enable_exact_entity_id: false
+
+  # ---- Change 4: fallback pass (candidate generation only) -------------
+  enable_fallback: true
+  # token_set_ratio floor for the sorted-neighborhood scan. This NEVER decides a
+  # match: it only decides whether a pair is worth *scoring*. Every pair it
+  # produces still has to clear the F_0.5-tuned classifier threshold.
+  fallback_fuzzy_floor: 0.72
+  fallback_window: 15                  # +/- neighbours examined around the query
+  fallback_neighborhood_window: 3      # +/- immediate neighbours, no floor at all
+  fallback_max_candidates: 50
+
+  enable_debug_log: true
+  max_debug_rows: 200000
+
+# Change 6. Explainability only -- the LightGBM classifier is the sole decision
+# mechanism. These weights are re-normalized per pair over the fields that
+# actually exist for that pair, so a record with no address is not punished for
+# it.
+weights:
+  name: 0.45
+  address: 0.30
+  city_state: 0.15
+  country: 0.10
+
+# Change 7. `high_threshold` is overwritten at run time by the F_0.5-maximizing
+# value from tune_threshold -- the value below is only the fallback for
+# mode=predict. `low_threshold_ratio` is the floor below which a record is not
+# a match at all, expressed as a fraction of the tuned high threshold so the
+# manual_review band keeps its width when the high threshold moves. The band
+# between the two is manual_review.
+decision:
+  high_threshold: 0.85
+  low_threshold_ratio: 0.60
+  # Absolute cap on the floor. Leave null to use the ratio alone.
+  low_threshold: null
+  # Best and second-best Source 1 probabilities within this margin -> ambiguous
+  # instead of an automatic match.
+  ambiguity_margin: 0.05
+  block_on_country_conflict: true
+  block_on_location_conflict: true
+  # City/state similarity above this counts as a spelling variant of the same
+  # place, not a conflict.
+  location_conflict_floor: 0.80
+
+validation:
+  # Fraction of Source 1 entities held out of training. Split by ENTITY, never
+  # by pair: the metric is per Source 1 entity, so a pair-level split leaks.
+  val_fraction: 0.20
+  # Of the held-out entities, the first half is used to tune the threshold and
+  # the second half is the reported set. Keeping them apart is the difference
+  # between a number and a number that means something.
+  tune_fraction: 0.50
+
+# Hard negatives: bias the negative half of the training matrix toward pairs the
+# scorer already rates most similar, instead of sampling uniformly. Training
+# only -- the tune cache and the held-out report split are untouched, so the
+# reported score stays comparable to the hardneg-disabled baseline.
+hardneg:
+  # Measured regression: hardneg arm = 0.8933 vs baseline 0.9019.
+  # Kept off until the bimodality diagnosis is acted on.
+  enabled: false
+  hard_fraction: 0.70      # share of the negative budget from the hard band
+  locality_fraction: 0.50   # of that, share also agreeing on country+city
+  random_fraction: 0.30     # kept uniform so calibration is not skewed
+  max_per_entity: 40
+  min_locality_score: 0.5
+
+model:
+  # lightgbm is preferred; src/model.py falls back to
+  # sklearn's HistGradientBoostingClassifier (the same algorithm) when the
+  # LightGBM wheel cannot load, which is the usual case on macOS without
+  # `brew install libomp`. eval_metric/early stopping are training mechanics, not
+  # reported metrics.
+  prefer: lightgbm
+  n_estimators: 400
+  learning_rate: 0.06
+  max_leaf_nodes: 31
+  min_samples_leaf: 20
+  n_jobs: 8
