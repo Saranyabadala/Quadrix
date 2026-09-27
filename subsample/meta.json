@@ -1,0 +1,66 @@
+{
+  "counts": {
+    "1": 40000,
+    "2": 266969,
+    "3": 271575
+  },
+  "stats": {
+    "per_key": {
+      "core_exact": {
+        "pairs": 48771,
+        "s1_covered": 28232
+      },
+      "prefix8": {
+        "pairs": 69468,
+        "s1_covered": 28738
+      },
+      "latin_token": {
+        "pairs": 85786,
+        "s1_covered": 39866
+      },
+      "number_city": {
+        "pairs": 27693,
+        "s1_covered": 14600
+      },
+      "soundex": {
+        "pairs": 219031,
+        "s1_covered": 36217
+      },
+      "zip": {
+        "pairs": 7166,
+        "s1_covered": 2532
+      },
+      "city_prefix": {
+        "pairs": 421,
+        "s1_covered": 274
+      },
+      "prefix4": {
+        "pairs": 113167,
+        "s1_covered": 31672
+      },
+      "other_token": {
+        "pairs": 0,
+        "s1_covered": 0
+      }
+    },
+    "pairs_before_dedup": 571503,
+    "pairs_after_dedup": 571209,
+    "pairs_final": 571186,
+    "mean_candidates_per_s1": 14.27965,
+    "s1_with_zero_candidates": 0,
+    "seconds": 13.1,
+    "n_s1": 40000,
+    "n_cand": 538544,
+    "full_cross_product": 21541760000,
+    "reduction_ratio": 2.652e-05
+  },
+  "blocking_recall": 2.887169419101513e-05,
+  "n_truth": 138544,
+  "n_hit": 4,
+  "per_source_recall": {
+    "s3": 2.7942717429269995e-05,
+    "s2": 2.986456420134689e-05
+  },
+  "n_pairs": 571186,
+  "n_positive_pairs": 571186
+}

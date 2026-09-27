@@ -1,0 +1,762 @@
+{
+  "config": "config/schema.yaml",
+  "seed": 42,
+  "generate": {
+    "n_entities": 1200,
+    "source1": 1296,
+    "source2": 1716,
+    "source3": 1668
+  },
+  "clean": {
+    "rows": {
+      "source2": 1716,
+      "source3": 1668
+    },
+    "n_source1": 1296
+  },
+  "block": {
+    "stats": {
+      "per_key": {
+        "phone10": {
+          "pairs": 1638,
+          "blocks": 898,
+          "skipped_blocks": 0
+        },
+        "zip5": {
+          "pairs": 25975,
+          "blocks": 171,
+          "skipped_blocks": 1
+        },
+        "zip3_name": {
+          "pairs": 7005,
+          "blocks": 643,
+          "skipped_blocks": 0
+        },
+        "soundex": {
+          "pairs": 2355,
+          "blocks": 49,
+          "skipped_blocks": 31
+        },
+        "name_prefix": {
+          "pairs": 0,
+          "blocks": 34,
+          "skipped_blocks": 34
+        },
+        "geo_cell": {
+          "pairs": 18642,
+          "blocks": 82,
+          "skipped_blocks": 14
+        },
+        "token": {
+          "pairs": 0,
+          "blocks": 74,
+          "skipped_blocks": 74
+        }
+      },
+      "n_pairs": 46547,
+      "n_pairs_per_s1": 35.91589506172839
+    },
+    "full_cross_product": 4385664,
+    "recall": {
+      "available": true,
+      "n_truth": 3045,
+      "n_survived": 2935,
+      "recall": 0.9639,
+      "per_source": {
+        "source2": {
+          "n_truth": 1556,
+          "n_survived": 1513,
+          "recall": 0.9724
+        },
+        "source3": {
+          "n_truth": 1489,
+          "n_survived": 1422,
+          "recall": 0.955
+        }
+      },
+      "keys_that_carried_matches": {
+        "phone10": 1487,
+        "zip5": 2746,
+        "zip3_name": 2579,
+        "soundex": 224,
+        "name_prefix": 0,
+        "geo_cell": 484,
+        "token": 0
+      },
+      "missed_pairs": [
+        {
+          "source1_id": "B000013",
+          "candidate_id": "R000013-365",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000014",
+          "candidate_id": "L000014-939",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000022",
+          "candidate_id": "L000022-186",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000023",
+          "candidate_id": "L000023-142",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000025",
+          "candidate_id": "R000025-367",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000027",
+          "candidate_id": "L000027-730",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000050",
+          "candidate_id": "L000050-934",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000070",
+          "candidate_id": "L000070-107",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000135",
+          "candidate_id": "L000135-811",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000145",
+          "candidate_id": "L000145-435",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000177",
+          "candidate_id": "R000177-447",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000184",
+          "candidate_id": "L000184-818",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000188",
+          "candidate_id": "R000188-962",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000197",
+          "candidate_id": "R000197-857",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000200",
+          "candidate_id": "R000200-312",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000206",
+          "candidate_id": "R000206-259",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000214",
+          "candidate_id": "L000214-495",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000228",
+          "candidate_id": "L000228-265",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000239",
+          "candidate_id": "L000239-653",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000263",
+          "candidate_id": "L000263-552",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000268",
+          "candidate_id": "R000268-993",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000273",
+          "candidate_id": "R000273-138",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000275",
+          "candidate_id": "L000275-924",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000293",
+          "candidate_id": "R000293-762",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000301",
+          "candidate_id": "L000301-691",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000311",
+          "candidate_id": "R000311-585",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000322",
+          "candidate_id": "L000322-177",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000334",
+          "candidate_id": "L000334-579",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000336",
+          "candidate_id": "L000336-666",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000358",
+          "candidate_id": "L000358-460",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000394",
+          "candidate_id": "L000394-254",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000418",
+          "candidate_id": "L000418-653",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000423",
+          "candidate_id": "L000423-817",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000423",
+          "candidate_id": "L000423-317",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000426",
+          "candidate_id": "L000426-926",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000452",
+          "candidate_id": "L000452-618",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000470",
+          "candidate_id": "L000470-265",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000497",
+          "candidate_id": "L000497-153",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000500",
+          "candidate_id": "L000500-552",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000508",
+          "candidate_id": "R000508-265",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000522",
+          "candidate_id": "L000522-603",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000525",
+          "candidate_id": "L000525-691",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000539",
+          "candidate_id": "L000539-768",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000540",
+          "candidate_id": "R000540-602",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000548",
+          "candidate_id": "R000548-573",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000548",
+          "candidate_id": "L000548-556",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000550",
+          "candidate_id": "R000550-554",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000551",
+          "candidate_id": "R000551-811",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000557",
+          "candidate_id": "L000557-553",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000559",
+          "candidate_id": "R000559-416",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000563",
+          "candidate_id": "L000563-219",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000611",
+          "candidate_id": "L000611-585",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000619",
+          "candidate_id": "L000619-217",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000628",
+          "candidate_id": "L000628-175",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000639",
+          "candidate_id": "L000639-649",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000642",
+          "candidate_id": "L000642-411",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000657",
+          "candidate_id": "L000657-480",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000668",
+          "candidate_id": "R000668-551",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000669",
+          "candidate_id": "R000669-585",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000669",
+          "candidate_id": "L000669-644",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000684",
+          "candidate_id": "R000684-552",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000711",
+          "candidate_id": "L000711-503",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000713",
+          "candidate_id": "L000713-435",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000733",
+          "candidate_id": "R000733-708",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000753",
+          "candidate_id": "R000753-221",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000753",
+          "candidate_id": "L000753-158",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000767",
+          "candidate_id": "R000767-156",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000774",
+          "candidate_id": "L000774-292",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000790",
+          "candidate_id": "R000790-734",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000803",
+          "candidate_id": "R000803-379",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000803",
+          "candidate_id": "R000803-644",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000803",
+          "candidate_id": "L000803-328",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000816",
+          "candidate_id": "R000816-820",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000822",
+          "candidate_id": "R000822-714",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000825",
+          "candidate_id": "L000825-329",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000834",
+          "candidate_id": "L000834-611",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000838",
+          "candidate_id": "L000838-115",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000848",
+          "candidate_id": "L000848-766",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000867",
+          "candidate_id": "R000867-519",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000874",
+          "candidate_id": "R000874-631",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000883",
+          "candidate_id": "L000883-836",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000886",
+          "candidate_id": "R000886-372",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000891",
+          "candidate_id": "L000891-912",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000915",
+          "candidate_id": "R000915-714",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000915",
+          "candidate_id": "R000915-256",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000915",
+          "candidate_id": "L000915-324",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000915",
+          "candidate_id": "L000915-372",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000944",
+          "candidate_id": "L000944-763",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000947",
+          "candidate_id": "R000947-621",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B000958",
+          "candidate_id": "L000958-306",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000960",
+          "candidate_id": "L000960-201",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000988",
+          "candidate_id": "L000988-722",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B000991",
+          "candidate_id": "L000991-734",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B001004",
+          "candidate_id": "R001004-918",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B001022",
+          "candidate_id": "R001022-799",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B001028",
+          "candidate_id": "L001028-158",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B001030",
+          "candidate_id": "L001030-934",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B001057",
+          "candidate_id": "R001057-434",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B001057",
+          "candidate_id": "L001057-716",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B001060",
+          "candidate_id": "L001060-717",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B001113",
+          "candidate_id": "L001113-178",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B001135",
+          "candidate_id": "L001135-663",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B001136",
+          "candidate_id": "R001136-345",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B001146",
+          "candidate_id": "R001146-570",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B001151",
+          "candidate_id": "R001151-996",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B001151",
+          "candidate_id": "L001151-978",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B001162",
+          "candidate_id": "L001162-811",
+          "candidate_source": "source3"
+        },
+        {
+          "source1_id": "B001232",
+          "candidate_id": "R001232-917",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B001263",
+          "candidate_id": "R001263-135",
+          "candidate_source": "source2"
+        },
+        {
+          "source1_id": "B001276",
+          "candidate_id": "R001276-486",
+          "candidate_source": "source2"
+        }
+      ]
+    }
+  },
+  "features": {
+    "n_candidate_pairs": 46547,
+    "n_features": 59
+  },
+  "labels": {
+    "distribution": {
+      "certain_nonmatch": 40244,
+      "ambiguous": 2534,
+      "certain_match": 2366,
+      "probable_match": 1403
+    },
+    "sheet": "artifacts/labeling_sheet.csv"
+  },
+  "model": {
+    "backend": "sklearn-histgb (lightgbm unavailable: dlopen(/Users/aravindkorada/aravind.c/hackanoth/.venv/lib/python3.9/site-packages/lightgbm/lib/lib_lightgbm.dylib, 0x0006): Library not loaded: @rpath/libomp.dylib)",
+    "threshold": 0.1156,
+    "validation": {
+      "threshold": 0.1156,
+      "tp": 473,
+      "fp": 0,
+      "fn": 0,
+      "tn": 8049,
+      "n_predicted_positive": 473,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0,
+      "roc_auc": 1.0,
+      "pr_auc": 1.0
+    },
+    "test": {
+      "threshold": 0.1156,
+      "tp": 473,
+      "fp": 1,
+      "fn": 0,
+      "tn": 8048,
+      "n_predicted_positive": 474,
+      "precision": 0.9979,
+      "recall": 1.0,
+      "f1": 0.9989,
+      "accuracy": 0.9999,
+      "roc_auc": 1.0,
+      "pr_auc": 1.0
+    },
+    "truth_validation": {
+      "threshold": 0.1156,
+      "tp": 441,
+      "fp": 32,
+      "fn": 14,
+      "tn": 8035,
+      "n_predicted_positive": 473,
+      "precision": 0.9323,
+      "recall": 0.9692,
+      "f1": 0.9504,
+      "accuracy": 0.9946,
+      "roc_auc": 0.9991,
+      "pr_auc": 0.9835
+    },
+    "truth_test": {
+      "threshold": 0.1156,
+      "tp": 446,
+      "fp": 28,
+      "fn": 18,
+      "tn": 8030,
+      "n_predicted_positive": 474,
+      "precision": 0.9409,
+      "recall": 0.9612,
+      "f1": 0.951,
+      "accuracy": 0.9946,
+      "roc_auc": 0.9991,
+      "pr_auc": 0.9826
+    },
+    "recommendation": {
+      "max_f1": {
+        "threshold": 0.1156,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "n_predicted_positive": 473,
+        "precision_ci95": [
+          0.9919,
+          1.0
+        ]
+      },
+      "precision_target": {
+        "threshold": 0.1156,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "n_predicted_positive": 473,
+        "precision_ci95": [
+          0.9919,
+          1.0
+        ]
+      },
+      "target_precision": 0.99,
+      "note": "precision_target is the recommended operating point: it maximizes recall subject to a precision floor, which suits a merge use case where a false positive silently merges two real businesses but a false negative is visible and reviewable."
+    },
+    "label_kind": "silver"
+  },
+  "output": {
+    "n_source1_entities": 1296,
+    "n_candidate_pairs_scored": 46547,
+    "n_pairs_accepted": 3289,
+    "acceptance_rate": 0.0707,
+    "entities_with_zero_matches": 65,
+    "entities_with_zero_matches_pct": 5.02,
+    "per_source": {
+      "source2": {
+        "accepted_pairs": 1713,
+        "distinct_source1_entities_matched": 1082,
+        "mean_score": 0.9811,
+        "min_score": 0.1181
+      },
+      "source3": {
+        "accepted_pairs": 1576,
+        "distinct_source1_entities_matched": 992,
+        "mean_score": 0.9275,
+        "min_score": 0.1192
+      }
+    }
+  }
+}
