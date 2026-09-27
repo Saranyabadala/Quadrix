@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Generated data, intermediates and outputs. All reproducible from
+# `python run_pipeline.py --generate`, so none of it belongs in version control.
+data/
+artifacts/
+output/
+output_oracle/
+output_reviewed/
+*.pkl

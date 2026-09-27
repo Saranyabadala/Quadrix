@@ -1,0 +1,25 @@
+# Core pipeline. Pinned loosely on purpose -- this is meant to run on whatever
+# is already installed; the only hard requirement is scikit-learn and pandas.
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+pyyaml>=6.0
+matplotlib>=3.7
+
+# Fuzzy string metrics. rapidfuzz is a large speedup over the pure-python
+# fallbacks in src/features.py (which are used automatically if these are
+# missing), and jellyfish provides soundex for blocking keys.
+rapidfuzz>=3.0
+jellyfish>=0.9
+
+# Optional: the preferred model backend. The macOS wheel needs LLVM OpenMP
+# (`brew install libomp`); without it src/model.py falls back to
+# sklearn's HistGradientBoostingClassifier, which is the same algorithm.
+# lightgbm>=4.0
+
+# Optional: the embedding feature described in the README. Not installed by
+# default because it requires a model download at first use.
+# sentence-transformers>=2.2
+
+# Tests
+pytest>=7.0
